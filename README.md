@@ -2,15 +2,15 @@
 
 ## Integrantes
 
-|Nome                                 |RA      |
-|-------------------------------------|--------|
-|Gustavo Garabetti Munhoz             |10409258|
-|João Pedro Rodrigues Vieira          |10403595|
-|Joaquim Rafael Mariano Prieto Pereira|10408805|
-|Caio Yukio Yazawa                    |10418604|
-|Erick Guilherme de Macedo Cabral     |10419996|
+| Nome | RA |
+|---|---|
+| Gustavo Garabetti Munhoz | 10409258 |
+| João Pedro Rodrigues Vieira | 10403595 |
+| Joaquim Rafael Mariano Prieto Pereira | 10408805 |
+| Caio Yukio Yazawa | 10418604 |
+| Erick Guilherme de Macedo Cabral | 10419996 |
 
------
+---
 
 ## Processo de Ideação — Migração para Next.js
 
@@ -20,16 +20,16 @@ O projeto original **El Patron WebApplication** foi desenvolvido como uma landin
 
 Com a evolução do projeto, identificamos limitações claras na abordagem estática:
 
-|Limitação do projeto original            |Impacto                                                                |
-|-----------------------------------------|-----------------------------------------------------------------------|
-|Sem roteamento — tudo em uma única página|Navegação limitada, difícil de escalar                                 |
-|Dados estáticos no HTML                  |Impossível atualizar conteúdo sem mexer no código                      |
-|Sem back-end                             |Formulário salva apenas no localStorage, sem persistência real         |
-|Sem catálogo de cortes dinâmico          |Não existe uma forma estruturada de exibir os tipos de corte oferecidos|
+| Limitação do projeto original | Impacto |
+|---|---|
+| Sem roteamento — tudo em uma única página | Navegação limitada, difícil de escalar |
+| Dados estáticos no HTML | Impossível atualizar conteúdo sem mexer no código |
+| Sem back-end | Formulário salva apenas no localStorage, sem persistência real |
+| Sem catálogo de cortes dinâmico | Não existe uma forma estruturada de exibir os tipos de corte oferecidos |
 
 A migração para **Next.js** resolve essas limitações ao introduzir roteamento baseado em arquivos, consumo de API externa, renderização híbrida (SSG + SSR) e uma base de código moderna e escalável.
 
------
+---
 
 ### Decisões de Arquitetura
 
@@ -42,7 +42,7 @@ A nova aplicação adota o **App Router** do Next.js 14+. As páginas estáticas
 - **CSS3** na estilização
 - **hairstyle-api** como back-end externo — desenvolvida pelo integrante Gustavo Garabetti em Clojure, responsável por armazenar e disponibilizar os tipos de corte ([repositório](https://github.com/ggarabs/hairstyle-api))
 
------
+---
 
 ### Novas Telas e Mudanças Principais
 
@@ -64,7 +64,7 @@ Repositório: [github.com/ggarabs/hairstyle-api](https://github.com/ggarabs/hair
 
 Página dedicada aos profissionais da El Patron, inexistente no projeto original. É completamente estática e pré-renderizada em build time. Cada membro exibe: nome, especialidade, tempo de casa, foto e link para Instagram (opcional).
 
------
+---
 
 ### Estrutura de Rotas
 
@@ -79,22 +79,22 @@ app/
         └── page.jsx           → Detalhe dinâmico de um corte
 ```
 
------
+---
 
 ## Protótipo — Wireframes
 
 ### Tela de Listagem de Cortes — `/cortes`
 
-> ⬇️ **Insira aqui o protótipo mobile da tela de listagem de cortes**
+![Protótipo mobile — Listagem de Cortes](./Cortes.svg)
 
------
+---
 
 ### Tela de Detalhe do Corte — `/cortes/[slug]`
 
-> ⬇️ **Insira aqui o protótipo mobile da tela de detalhe do corte**
+![Protótipo mobile — Detalhe do Corte](./Corte.svg)
 
------
+---
 
 ### Tela da Equipe — `/equipe`
 
-> ⬇️ **Insira aqui o protótipo mobile da tela da equipe**
+![Protótipo mobile — Equipe](./Equipe.svg)
