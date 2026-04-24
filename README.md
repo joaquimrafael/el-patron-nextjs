@@ -3,7 +3,7 @@
 ## Integrantes
 
 | Nome | RA |
-|---|---|
+| ---- | -- |
 | Gustavo Garabetti Munhoz | 10409258 |
 | João Pedro Rodrigues Vieira | 10403595 |
 | Joaquim Rafael Mariano Prieto Pereira | 10408805 |
@@ -21,7 +21,7 @@ O projeto original **El Patron WebApplication** foi desenvolvido como uma landin
 Com a evolução do projeto, identificamos limitações claras na abordagem estática:
 
 | Limitação do projeto original | Impacto |
-|---|---|
+| ----------------------------- | ------- |
 | Sem roteamento — tudo em uma única página | Navegação limitada, difícil de escalar |
 | Dados estáticos no HTML | Impossível atualizar conteúdo sem mexer no código |
 | Sem back-end | Formulário salva apenas no localStorage, sem persistência real |
@@ -68,7 +68,7 @@ Página dedicada aos profissionais da El Patron, inexistente no projeto original
 
 ### Estrutura de Rotas
 
-```
+```DIG
 app/
 ├── page.jsx                   → Home (landing page original)
 ├── equipe/
@@ -85,16 +85,16 @@ app/
 
 ### Tela de Listagem de Cortes — `/cortes`
 
-![Protótipo mobile — Listagem de Cortes](./Cortes.svg)
+![Protótipo mobile — Listagem de Cortes](img/Cortes.svg)
 
 ---
 
 ### Tela de Detalhe do Corte — `/cortes/[id]`
 
-![Protótipo mobile — Detalhe do Corte](./Corte.svg)
+![Protótipo mobile — Detalhe do Corte](img/Corte.svg)
 
 ---
 
 ### Tela da Equipe — `/equipe`
 
-![Protótipo mobile — Equipe](./Equipe.svg)
+![Protótipo mobile — Equipe](img/Equipe.svg)
