@@ -50,9 +50,9 @@ A nova aplicação adota o **App Router** do Next.js 14+. As páginas estáticas
 
 Catálogo com todos os tipos de corte oferecidos pela barbearia, alimentado pela **hairstyle-api**. Exibe os cortes em cards, cada um com nome, imagem e preço. Ao clicar em um card, o usuário é levado à página de detalhe do corte correspondente.
 
-#### 2. Tela Dinâmica de Detalhe — `/cortes/[slug]`
+#### 2. Tela Dinâmica de Detalhe — `/cortes/[id]`
 
-Página individual de cada corte, acessada a partir da listagem. Exibe todas as informações do corte selecionado: nome, descrição, preço, duração estimada e imagem. Caso o slug não exista, o usuário é direcionado para uma página 404 customizada.
+Página individual de cada corte, acessada a partir da listagem. Exibe todas as informações do corte selecionado: nome, descrição, preço, duração estimada e imagem. Caso o id não exista, o usuário é direcionado para uma página 404 customizada.
 
 #### 3. hairstyle-api
 
@@ -75,7 +75,7 @@ app/
 │   └── page.jsx               → Tela estática da equipe
 └── cortes/
     ├── page.jsx               → Catálogo de cortes
-    └── [slug]/
+    └── [id]/
         └── page.jsx           → Detalhe dinâmico de um corte
 ```
 
@@ -89,7 +89,7 @@ app/
 
 ---
 
-### Tela de Detalhe do Corte — `/cortes/[slug]`
+### Tela de Detalhe do Corte — `/cortes/[id]`
 
 ![Protótipo mobile — Detalhe do Corte](./Corte.svg)
 
