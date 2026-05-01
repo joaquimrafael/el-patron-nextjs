@@ -33,13 +33,14 @@ A migração para **Next.js** resolve essas limitações ao introduzir roteament
 
 ### Decisões de Arquitetura
 
-A nova aplicação adota o **App Router** do Next.js 14+. As páginas estáticas são pré-renderizadas em build time, enquanto a tela de cortes consome dados em runtime via API externa.
+A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte organizado sob `src/app`. As páginas estáticas são pré-renderizadas em build time, enquanto a tela de cortes consumirá dados em runtime via API externa.
 
 **Stack escolhida:**
 
-- **Next.js 14+** com App Router
+- **Next.js 16** com App Router (estrutura `src/app`)
+- **React 19**
 - **JavaScript** puro (sem TypeScript)
-- **CSS3** na estilização
+- **CSS3** na estilização (`globals.css`)
 - **hairstyle-api** como back-end externo — desenvolvida pelo integrante Gustavo Garabetti em Clojure, responsável por armazenar e disponibilizar os tipos de corte ([repositório](https://github.com/ggarabs/hairstyle-api))
 
 ---
@@ -48,11 +49,11 @@ A nova aplicação adota o **App Router** do Next.js 14+. As páginas estáticas
 
 #### 1. Tela de Listagem de Cortes — `/cortes`
 
-Catálogo com todos os tipos de corte oferecidos pela barbearia, alimentado pela **hairstyle-api**. Exibe os cortes em cards, cada um com nome, imagem e preço. Ao clicar em um card, o usuário é levado à página de detalhe do corte correspondente.
+Catálogo com todos os tipos de corte oferecidos pela barbearia, a ser alimentado pela **hairstyle-api**. Exibe os cortes em cards, cada um com nome, imagem e preço. Ao clicar em um card, o usuário é levado à página de detalhe do corte correspondente. Atualmente a tela está implementada como um template estático com cortes de exemplo, aguardando a integração com a API.
 
-#### 2. Tela Dinâmica de Detalhe — `/cortes/[id]`
+#### 2. Tela Dinâmica de Detalhe — `/cortes/[hairstyle-id]`
 
-Página individual de cada corte, acessada a partir da listagem. Exibe todas as informações do corte selecionado: nome, descrição, preço, duração estimada e imagem. Caso o id não exista, o usuário é direcionado para uma página 404 customizada.
+Página individual de cada corte, acessada a partir da listagem. Exibirá todas as informações do corte selecionado: nome, descrição, preço, duração estimada e imagem. Caso o id não exista, o usuário será direcionado para uma página 404 customizada. No estado atual, a rota dinâmica está scaffolded com conteúdo de exemplo, pronta para receber os dados vindos da API.
 
 #### 3. hairstyle-api
 
@@ -62,22 +63,36 @@ Repositório: [github.com/ggarabs/hairstyle-api](https://github.com/ggarabs/hair
 
 #### 4. Tela Estática da Equipe — `/equipe`
 
-Página dedicada aos profissionais da El Patron, inexistente no projeto original. É completamente estática e pré-renderizada em build time. Cada membro exibe: nome, especialidade, tempo de casa, foto e link para Instagram (opcional).
+Página dedicada aos profissionais da El Patron, inexistente no projeto original. Será completamente estática e pré-renderizada em build time. Cada membro exibirá: nome, especialidade, tempo de casa, foto e link para Instagram (opcional). A rota já existe na estrutura do App Router, mas o conteúdo da página ainda não foi implementado.
 
 ---
 
 ### Estrutura de Rotas
 
 ```DIG
-app/
+src/app/
+├── layout.jsx                 → Layout raiz (header, footer, metadata)
+├── globals.css                → Estilos globais portados do projeto original
 ├── page.jsx                   → Home (landing page original)
 ├── equipe/
 │   └── page.jsx               → Tela estática da equipe
 └── cortes/
     ├── page.jsx               → Catálogo de cortes
-    └── [id]/
+    └── [hairstyle-id]/
         └── page.jsx           → Detalhe dinâmico de um corte
 ```
+
+---
+
+### Status de Implementação
+
+| Tela / Rota | Status |
+| ----------- | ------ |
+| `/` — Home (landing page) | Migrada do projeto original, mantendo o comportamento de DOM/`localStorage` |
+| `/cortes` — Listagem | Template estático com cortes de exemplo; integração com a API pendente |
+| `/cortes/[hairstyle-id]` — Detalhe | Rota dinâmica scaffolded; consumo da API e tratamento de 404 pendentes |
+| `/equipe` — Equipe | Rota criada; conteúdo da página ainda não implementado |
+| `hairstyle-api` | Em desenvolvimento no repositório externo; endpoints serão documentados conforme evoluem |
 
 ---
 
