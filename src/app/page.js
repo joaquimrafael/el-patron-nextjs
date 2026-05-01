@@ -114,6 +114,12 @@ export default function Home() {
                 Localização
               </a>
             </li>
+            <li className="">
+              <a href="/equipe">Equipe</a>
+            </li>
+            <li className="">
+              <a href="/cortes">Cortes</a>
+            </li>
           </ul>
         </nav>
       </header>
@@ -137,7 +143,11 @@ export default function Home() {
           <div className="overlay"></div>
 
           <a href="">
-            <img src="/imgs/elpatron.jpg" className="core-img" alt="Logo Grande" />
+            <img
+              src="/imgs/elpatron.jpg"
+              className="core-img"
+              alt="Logo Grande"
+            />
           </a>
         </section>
 
@@ -236,8 +246,8 @@ export default function Home() {
                 <h3>Barba</h3>
                 <p>
                   Aparagem e modelagem de barba com navalha, toalha quente e
-                  produtos premium. Cuide da sua barba com quem realmente entende
-                  do assunto.
+                  produtos premium. Cuide da sua barba com quem realmente
+                  entende do assunto.
                 </p>
               </div>
             </article>
@@ -346,6 +356,12 @@ export default function Home() {
               >
                 Instagram
               </a>
+            </li>
+            <li className="">
+              <a href="/equipe">Equipe</a>
+            </li>
+            <li className="">
+              <a href="/cortes">Cortes</a>
             </li>
           </ul>
         </footer>
