@@ -18,46 +18,38 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <header id="header-closed">
-        <nav>
-          <ul>
-            <li className="navbar-link">
-              <a href="#home" /*onClick={toggleNavbar}*/>
-                Home
-              </a>
-            </li>
-            <li className="navbar-link">
-              <a href="#about" /*onClick={toggleNavbar}*/>
-                Sobre nós
-              </a>
-            </li>
-            <li className="navbar-link">
-              <a href="#structure" /*onClick={toggleNavbar}*/>
-                Estrutura
-              </a>
-            </li>
-            <li className="navbar-link">
-              <a href="#services" /*onClick={toggleNavbar}*/>
-                Serviços
-              </a>
-            </li>
-            <li className="navbar-link">
-              <a href="#contact-us" /*onClick={toggleNavbar}*/>
-                Fale conosco
-              </a>
-            </li>
-            <li className="navbar-link">
-              <a href="#localization" /*onClick={toggleNavbar}*/>
-                Localização
-              </a>
-            </li>
-            <li className="">
-              <a href="/equipe">Equipe</a>
-            </li>
-            <li className="">
-              <a href="/cortes">Cortes</a>
-            </li>
-          </ul>
-        </nav>
+          <nav>
+            <ul>
+              <li className="navbar-link">
+                <a href="#home" /*onClick={toggleNavbar}*/>Home</a>
+              </li>
+              <li className="navbar-link">
+                <a href="#about" /*onClick={toggleNavbar}*/>Sobre nós</a>
+              </li>
+              <li className="navbar-link">
+                <a href="#structure" /*onClick={toggleNavbar}*/>Estrutura</a>
+              </li>
+              <li className="navbar-link">
+                <a href="#services" /*onClick={toggleNavbar}*/>Serviços</a>
+              </li>
+              <li className="navbar-link">
+                <a href="#contact-us" /*onClick={toggleNavbar}*/>
+                  Fale conosco
+                </a>
+              </li>
+              <li className="navbar-link">
+                <a href="#localization" /*onClick={toggleNavbar}*/>
+                  Localização
+                </a>
+              </li>
+              <li className="navbar-link">
+                <a href="/equipe">Equipe</a>
+              </li>
+              <li className="navbar-link">
+                <a href="/cortes">Cortes</a>
+              </li>
+            </ul>
+          </nav>
         </header>
 
         {children} 
@@ -106,4 +98,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-
