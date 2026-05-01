@@ -1,3 +1,3 @@
-export default function TeamPage() {
+export default function HairStylesIdPage() {
   return <></>;
 }

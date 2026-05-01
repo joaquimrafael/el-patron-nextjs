@@ -1,3 +1,10 @@
-export default function TeamPage() {
-  return <></>;
+export const metadata = {
+  title: 'Cortes',
+};
+
+export default function HairStylesPage() {
+  return (
+    <>
+    </>
+  );
 }
