@@ -51,7 +51,9 @@ export default function RootLayout({ children }) {
             </ul>
           </nav>
         </header>
-        {children}
+
+        {children} 
+        
         <footer>
           <ul>
             <li>
