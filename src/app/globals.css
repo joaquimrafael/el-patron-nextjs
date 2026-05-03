@@ -591,6 +591,164 @@ footer ul {
   justify-content: center;
 }
 
+/* LIST PAGES — /cortes & /equipe */
+.list-page {
+  width: 100%;
+  max-width: 70rem;
+  padding: 5rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.list-page h1 {
+  text-align: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 35rem;
+  background-color: var(--brown-dark-active);
+  border-radius: 0.7rem;
+  padding: 0 1rem;
+  gap: 0.5rem;
+  cursor: text;
+}
+
+.search-bar .material-symbols-outlined {
+  color: var(--silver-normal);
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.75rem 0;
+  color: var(--blue-normal);
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.search-bar input::placeholder {
+  color: var(--silver-normal);
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 35rem;
+}
+
+.card {
+  background-color: var(--brown-dark-active);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card a {
+  display: block;
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 210 / 229;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+}
+
+.card-label {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  text-align: center;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.card-subtitle {
+  font-size: 0.875rem;
+  color: var(--silver-normal);
+}
+
+/* DETAIL PAGE — /cortes/[hairstyle-id] */
+.detail-page {
+  width: 100%;
+  max-width: 50rem;
+  padding: 5rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.detail-page h1 {
+  text-align: center;
+  width: 100%;
+}
+
+.detail-summary {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 35rem;
+  align-items: flex-start;
+}
+
+.detail-img {
+  width: 45%;
+  max-width: 12rem;
+  height: auto;
+  object-fit: cover;
+  border-radius: 1rem;
+  flex-shrink: 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-content: flex-start;
+  flex: 1;
+  padding: 0;
+}
+
+.tag {
+  background-color: var(--brown-dark);
+  color: var(--blue-normal);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+  background-color: var(--brown-normal-hover);
+}
+
+.detail-page p {
+  color: var(--silver-normal);
+  width: 100%;
+  max-width: 35rem;
+}
+
 /* DESKTOP — a partir de 768px */
 @media (min-width: 768px) {
   :root {
@@ -757,5 +915,26 @@ footer ul {
     width: 100%;
     min-height: 300px;
     border: none;
+  }
+
+  .list-page,
+  .detail-page {
+    padding: 7rem 2rem 3rem;
+  }
+
+  .card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    max-width: none;
+    gap: 1.5rem;
+  }
+
+  .detail-summary {
+    max-width: 40rem;
+    gap: 2rem;
+  }
+
+  .detail-img {
+    max-width: 16rem;
   }
 }
