@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 const haircuts = {
   americano: {
@@ -40,12 +41,7 @@ export default async function HairStyleDetailPage({ params }) {
   const haircut = await getHaircut(id);
 
   if (!haircut) {
-    return (
-      <main className="detail-page">
-        <h1>Corte não encontrado</h1>
-        <p>O corte que você procura não está no nosso catálogo.</p>
-      </main>
-    );
+    notFound();
   }
 
   return (
