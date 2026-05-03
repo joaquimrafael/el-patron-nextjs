@@ -23,24 +23,24 @@ export default function RootLayout({ children }) {
           <nav>
             <ul>
               <li className="navbar-link">
-                <a href="#home" /*onClick={toggleNavbar}*/>Home</a>
+                <a href="/#home" /*onClick={toggleNavbar}*/>Home</a>
               </li>
               <li className="navbar-link">
-                <a href="#about" /*onClick={toggleNavbar}*/>Sobre nós</a>
+                <a href="/#about" /*onClick={toggleNavbar}*/>Sobre nós</a>
               </li>
               <li className="navbar-link">
-                <a href="#structure" /*onClick={toggleNavbar}*/>Estrutura</a>
+                <a href="/#structure" /*onClick={toggleNavbar}*/>Estrutura</a>
               </li>
               <li className="navbar-link">
-                <a href="#services" /*onClick={toggleNavbar}*/>Serviços</a>
+                <a href="/#services" /*onClick={toggleNavbar}*/>Serviços</a>
               </li>
               <li className="navbar-link">
-                <a href="#contact-us" /*onClick={toggleNavbar}*/>
+                <a href="/#contact-us" /*onClick={toggleNavbar}*/>
                   Fale conosco
                 </a>
               </li>
               <li className="navbar-link">
-                <a href="#localization" /*onClick={toggleNavbar}*/>
+                <a href="/#localization" /*onClick={toggleNavbar}*/>
                   Localização
                 </a>
               </li>
@@ -59,22 +59,22 @@ export default function RootLayout({ children }) {
         <footer>
           <ul>
             <li>
-              <a href="#home">Home</a>
+              <a href="/#home">Home</a>
             </li>
             <li>
-              <a href="#about">Sobre nós</a>
+              <a href="/#about">Sobre nós</a>
             </li>
             <li>
-              <a href="#structure">Estrutura</a>
+              <a href="/#structure">Estrutura</a>
             </li>
             <li>
-              <a href="#services">Serviços</a>
+              <a href="/#services">Serviços</a>
             </li>
             <li>
-              <a href="#localization">Localização</a>
+              <a href="/#localization">Localização</a>
             </li>
             <li>
-              <a href="#contact-us">Fale conosco</a>
+              <a href="/#contact-us">Fale conosco</a>
             </li>
             <li>
               <a href="tel:+">+55 (11) 9999-9999</a>
