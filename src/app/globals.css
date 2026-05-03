@@ -749,6 +749,7 @@ footer ul {
   color: var(--silver-normal);
   width: 100%;
   max-width: 35rem;
+  text-align: center;
 }
 
 /* DESKTOP — a partir de 768px */
