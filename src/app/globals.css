@@ -595,6 +595,7 @@ footer ul {
 .list-page {
   width: 100%;
   max-width: 70rem;
+  margin-inline: auto;
   padding: 5rem 1rem 2rem;
   display: flex;
   flex-direction: column;
@@ -691,6 +692,7 @@ footer ul {
 .detail-page {
   width: 100%;
   max-width: 50rem;
+  margin-inline: auto;
   padding: 5rem 1rem 2rem;
   display: flex;
   flex-direction: column;
