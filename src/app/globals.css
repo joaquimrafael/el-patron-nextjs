@@ -624,49 +624,6 @@ footer ul {
   max-width: 35rem;
 }
 
-.card {
-  background-color: var(--brown-dark-active);
-  border-radius: 1rem;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-}
-
-.card a {
-  display: block;
-}
-
-.card-img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 210 / 229;
-  object-fit: cover;
-  border-radius: 0;
-  display: block;
-}
-
-.card-label {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-items: center;
-  text-align: center;
-}
-
-.card-title {
-  font-weight: 600;
-  font-size: 1.125rem;
-}
-
-.card-subtitle {
-  font-size: 0.875rem;
-  color: var(--silver-normal);
-}
-
 /* DETAIL PAGE — /cortes/[hairstyle-id] */
 .detail-page {
   width: 100%;
