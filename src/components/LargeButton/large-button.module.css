@@ -1,0 +1,60 @@
+.base {
+  cursor: pointer;
+
+  color: #f9fafb;
+  background-color: #cc2936;
+
+  overflow-wrap: break-word;
+
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.large {
+  font-size: 1.5rem;
+  padding: 0.875rem 2.5rem;
+  border-radius: 10rem;
+}
+
+.largeButton:hover {
+  background-color: var(--red-normal-hover);
+}
+
+.largeButton:active {
+  background-color: var(--red-normal-active);
+}
+
+.largeButton {
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.largeButton:active {
+  transform: scale(0.97);
+}
+
+.largeButton {
+  border: none;
+  color: var(--blue-normal);
+  background-color: var(--red-normal);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  padding: 0.5rem 1.5rem;
+  border-radius: 10rem;
+
+  min-width: 10rem;
+  min-height: 3rem;
+
+  font-size: 1.25rem;
+  font-weight: 500;
+
+  overflow-wrap: break-word;
+}

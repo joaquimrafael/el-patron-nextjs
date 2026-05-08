@@ -166,22 +166,6 @@ img {
 
 /*Hover nos botões*/
 
-.large-button:hover {
-  background-color: var(--red-normal-hover);
-}
-
-.medium-button:hover {
-  background-color: var(--red-normal-hover);
-}
-
-.medium-button:active {
-  background-color: var(--red-normal-active);
-}
-
-.large-button:active {
-  background-color: var(--red-normal-active);
-}
-
 .small-button:hover {
   background-color: var(--red-normal-hover);
 }
@@ -190,58 +174,14 @@ img {
   background-color: var(--red-normal-active);
 }
 
-.large-button,
-.medium-button,
 .small-button {
   transition:
     background-color 0.2s ease,
     transform 0.1s ease;
 }
 
-.large-button:active,
-.medium-button:active,
 .small-button:active {
   transform: scale(0.97);
-}
-
-.large-button {
-  border: none;
-  color: var(--blue-normal);
-  background-color: var(--red-normal);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  padding: 0.5rem 1.5rem;
-  border-radius: 10rem;
-
-  min-width: 10rem;
-  min-height: 3rem;
-
-  font-size: 1.25rem;
-  font-weight: 500;
-
-  overflow-wrap: break-word;
-}
-
-.medium-button {
-  border: none;
-  color: var(--blue-normal);
-  background-color: var(--red-normal);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  padding: 0.5rem 1.5rem;
-  border-radius: 1rem;
-
-  overflow-wrap: break-word;
 }
 
 .small-button {

@@ -1,0 +1,54 @@
+.base {
+  cursor: pointer;
+
+  color: #f9fafb;
+  background-color: #cc2936;
+
+  overflow-wrap: break-word;
+
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.medium {
+  font-size: 0.75rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 2rem;
+}
+
+.mediumButton {
+  border: none;
+  color: var(--blue-normal);
+  background-color: var(--red-normal);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+
+  overflow-wrap: break-word;
+}
+
+.mediumButton:hover {
+  background-color: var(--red-normal-hover);
+}
+
+.mediumButton:active {
+  background-color: var(--red-normal-active);
+}
+
+.mediumButton:active {
+  transform: scale(0.97);
+}
+
+.mediumButton {
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
