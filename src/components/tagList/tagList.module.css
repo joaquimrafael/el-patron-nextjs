@@ -1,0 +1,8 @@
+.taglist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-content: flex-start;
+  flex: 1;
+  padding: 0;
+}

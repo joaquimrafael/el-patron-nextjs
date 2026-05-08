@@ -585,16 +585,6 @@ footer ul {
 .list-page h1 {
   text-align: center;
 }
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-content: flex-start;
-  flex: 1;
-  padding: 0;
-}
-
 /* DESKTOP — a partir de 768px */
 @media (min-width: 768px) {
   :root {
