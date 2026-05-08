@@ -40,7 +40,8 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 - **Next.js 16** com App Router (estrutura `src/app`)
 - **React 19**
 - **JavaScript** puro (sem TypeScript)
-- **CSS3** na estilização (`globals.css`)
+- **CSS3** — estilos globais em `globals.css` (portados do projeto original) somados a **CSS Modules** por componente em `src/components/*` (ex.: `card.module.css`, `cardList.module.css`)
+- Camada de dados em `src/lib/` (`haircuts.js`, `team.js`) com funções `async` que hoje devolvem mocks e serão substituídas pelo consumo da API sem alterar a assinatura usada pelas páginas
 - **hairstyle-api** como back-end externo — desenvolvida pelo integrante Gustavo Garabetti em Clojure, responsável por armazenar e disponibilizar os tipos de corte ([repositório](https://github.com/ggarabs/hairstyle-api))
 
 ---
@@ -49,11 +50,11 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 
 #### 1. Tela de Listagem de Cortes — `/cortes`
 
-Catálogo com todos os tipos de corte oferecidos pela barbearia, a ser alimentado pela **hairstyle-api**. Exibe os cortes em cards, cada um com nome, imagem e preço. Ao clicar em um card, o usuário é levado à página de detalhe do corte correspondente. Atualmente a tela já apresenta o layout final — grade responsiva (cards em coluna no mobile e em grid no desktop) e campo de busca como _stub_ visual — populada com cortes de exemplo, aguardando a integração com a API.
+Catálogo com todos os tipos de corte oferecidos pela barbearia, a ser alimentado pela **hairstyle-api**. Exibe os cortes em cards (componente `Card` dentro de `CardList`), cada um com nome e imagem, e o card inteiro funciona como link para a página de detalhe correspondente. A página é um **Server Component `async`** que busca os dados via `getHaircuts()` em `src/lib/haircuts.js` — hoje devolvendo um conjunto fixo de exemplos, no formato exato esperado da API. A tela já apresenta o layout final, com grade responsiva (cards em coluna no mobile e em grid no desktop) e campo de busca (`SearchBar`) como _stub_ visual.
 
 #### 2. Tela Dinâmica de Detalhe — `/cortes/[hairstyle-id]`
 
-Página individual de cada corte, acessada a partir da listagem. Exibe nome, descrição, imagem e tags do corte selecionado — preço e duração estimada serão acrescentados junto com a integração da API. A página 404 customizada já está implementada via `not-found.jsx` no mesmo segmento dinâmico: ao acessar um id inexistente, a aplicação responde com HTTP 404 e renderiza uma tela com mensagem amigável e botão de retorno ao catálogo. No estado atual, a rota dinâmica trabalha com um conjunto fixo de cortes de exemplo, pronta para receber os dados vindos da API.
+Página individual de cada corte, acessada a partir da listagem. É um Server Component `async` que recebe o `hairstyle-id` via `params`, busca o corte por `getHaircut(id)` e, em caso de id inexistente, dispara `notFound()` do `next/navigation`. A renderização é delegada ao componente `HaircutDetail`, que exibe nome, imagem (`next/image`), descrição e a lista de tags (`TagList` + `Tag`) — preço e duração estimada serão acrescentados junto com a integração da API. A página 404 customizada está implementada em `not-found.jsx` no mesmo segmento dinâmico: a aplicação responde com HTTP 404 e renderiza uma tela com mensagem amigável e botão de retorno ao catálogo.
 
 #### 3. hairstyle-api
 
@@ -63,25 +64,54 @@ Repositório: [github.com/ggarabs/hairstyle-api](https://github.com/ggarabs/hair
 
 #### 4. Tela Estática da Equipe — `/equipe`
 
-Página dedicada aos profissionais da El Patron, inexistente no projeto original. Será completamente estática e pré-renderizada em build time. Cada membro exibirá: nome, especialidade, tempo de casa, foto e link para Instagram (opcional). Atualmente a tela já apresenta o layout final, reutilizando a mesma estrutura de cards da listagem de cortes, e exibe membros de exemplo (nome e especialidade). Os dados definitivos da equipe e o link para Instagram serão preenchidos em uma próxima iteração.
+Página dedicada aos profissionais da El Patron, inexistente no projeto original. Será completamente estática e pré-renderizada em build time. Cada membro exibirá: nome, especialidade, tempo de casa, foto e link para Instagram (opcional). Hoje a tela já apresenta o layout final, reutilizando os componentes `Card` e `CardList` da listagem de cortes — o mesmo `Card` aceita uma prop `subtitle` que aqui é usada para a especialidade do barbeiro. Os dados vêm de `getTeam()` em `src/lib/team.js`, com membros de exemplo (nome, especialidade e foto). Os dados definitivos da equipe, tempo de casa e link para Instagram serão preenchidos em uma próxima iteração.
+
+---
+
+### Componentes Compartilhados
+
+Para evitar duplicação entre `/cortes` e `/equipe` (e preparar terreno para a integração com a API), o catálogo, a tela da equipe e a tela de detalhe foram montados a partir de componentes reutilizáveis em `src/components/`:
+
+| Componente | Responsabilidade |
+| ---------- | ---------------- |
+| `Card` / `CardList` | Card de imagem com título e subtítulo opcional, encapsulado por um `Link` quando `href` é informado; usado tanto pela listagem de cortes quanto pela equipe |
+| `SearchBar` | Campo de busca com ícone Material Symbols — atualmente _stub_ visual em `/cortes` |
+| `HaircutDetail` | Composição da tela de detalhe (nome, imagem via `next/image`, tags e descrição) |
+| `Tag` / `TagList` | Lista horizontal de tags exibida na tela de detalhe |
+| `LargeButton` / `MediumButton` | Botões reutilizáveis com variantes de tamanho (CSS Modules) |
+| `CarouselButton` | Botão chevron do carrossel da home |
+| `ServiceCard` | Card da seção de serviços da home |
 
 ---
 
 ### Estrutura de Rotas
 
 ```DIG
-src/app/
-├── layout.jsx                 → Layout raiz (header, footer, metadata)
-├── globals.css                → Estilos globais portados do projeto original
-├── Hamburger.jsx              → Botão da navbar mobile (client component)
-├── page.jsx                   → Home (landing page original)
-├── equipe/
-│   └── page.jsx               → Tela estática da equipe
-└── cortes/
-    ├── page.jsx               → Catálogo de cortes
-    └── [hairstyle-id]/
-        ├── page.jsx           → Detalhe dinâmico de um corte
-        └── not-found.jsx      → Página 404 customizada do segmento dinâmico
+src/
+├── app/
+│   ├── layout.jsx                 → Layout raiz (header, footer, metadata)
+│   ├── globals.css                → Estilos globais portados do projeto original
+│   ├── Hamburger.jsx              → Botão da navbar mobile (client component)
+│   ├── page.jsx                   → Home (landing page original)
+│   ├── equipe/
+│   │   └── page.jsx               → Tela da equipe (Server Component async)
+│   └── cortes/
+│       ├── page.jsx               → Catálogo de cortes (Server Component async)
+│       └── [hairstyle-id]/
+│           ├── page.jsx           → Detalhe dinâmico de um corte
+│           └── not-found.jsx      → Página 404 customizada do segmento dinâmico
+├── components/
+│   ├── card/                      → Card + card.module.css
+│   ├── cardList/                  → CardList + cardList.module.css
+│   ├── searchBar/                 → SearchBar (stub visual)
+│   ├── haircutDetail/             → HaircutDetail (composição da tela de detalhe)
+│   ├── tag/ , tagList/            → Tag e TagList
+│   ├── button/                    → LargeButton, MediumButton + styles.module.css
+│   ├── carouselButton/            → Botão chevron do carrossel da home
+│   └── serviceCard/               → Card da seção de serviços da home
+└── lib/
+    ├── haircuts.js                → getHaircuts(), getHaircut(id) — hoje devolvem mocks
+    └── team.js                    → getTeam() — hoje devolve mocks
 ```
 
 ---
@@ -91,9 +121,10 @@ src/app/
 | Tela / Rota | Status |
 | ----------- | ------ |
 | `/` — Home (landing page) | Migrada do projeto original, mantendo o comportamento de DOM/`localStorage` |
-| `/cortes` — Listagem | Layout final implementado, com cortes de exemplo, grade responsiva e campo de busca como _stub_; integração com a API pendente |
-| `/cortes/[hairstyle-id]` — Detalhe | Implementada com conteúdo de exemplo (nome, descrição, imagem e tags); página 404 customizada (`not-found.jsx`) ativa; consumo da API pendente |
-| `/equipe` — Equipe | Layout final implementado, com membros de exemplo (nome e especialidade); dados definitivos e link para Instagram pendentes |
+| `/cortes` — Listagem | Server Component `async` consumindo `getHaircuts()` (mock em `src/lib/haircuts.js`); layout final com `Card`/`CardList`, grade responsiva e `SearchBar` como _stub_; integração com a API pendente |
+| `/cortes/[hairstyle-id]` — Detalhe | Server Component `async` consumindo `getHaircut(id)`; renderiza `HaircutDetail` (nome, imagem via `next/image`, tags e descrição); 404 customizada (`not-found.jsx`) ativa via `notFound()`; consumo da API pendente |
+| `/equipe` — Equipe | Server Component `async` consumindo `getTeam()` (mock em `src/lib/team.js`); layout final reutilizando `Card`/`CardList` com `subtitle` para a especialidade; dados definitivos, tempo de casa e link para Instagram pendentes |
+| Camada de dados (`src/lib/`) | Funções `async` (`getHaircuts`, `getHaircut`, `getTeam`) já no contrato esperado da API; troca por `fetch` será pontual |
 | `hairstyle-api` | Em desenvolvimento no repositório externo; endpoints serão documentados conforme evoluem |
 
 ---
