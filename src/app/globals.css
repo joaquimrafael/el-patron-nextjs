@@ -595,20 +595,6 @@ footer ul {
   padding: 0;
 }
 
-.tag {
-  background-color: var(--brown-dark);
-  color: var(--blue-normal);
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.tag:hover {
-  background-color: var(--brown-normal-hover);
-}
-
 /* DESKTOP — a partir de 768px */
 @media (min-width: 768px) {
   :root {
