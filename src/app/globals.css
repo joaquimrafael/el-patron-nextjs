@@ -616,14 +616,6 @@ footer ul {
   color: var(--silver-normal);
 }
 
-.card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 35rem;
-}
-
 /* DETAIL PAGE — /cortes/[hairstyle-id] */
 .detail-page {
   width: 100%;
@@ -859,13 +851,6 @@ footer ul {
   .list-page,
   .detail-page {
     padding: 7rem 2rem 3rem;
-  }
-
-  .card-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    max-width: none;
-    gap: 1.5rem;
   }
 
   .detail-summary {

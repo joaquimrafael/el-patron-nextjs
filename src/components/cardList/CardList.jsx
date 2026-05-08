@@ -1,3 +1,5 @@
+import styles from "@/components/cardList/cardList.module.css";
+
 export default function CardList({ children }) {
-  return <ul className="card-list">{children}</ul>;
+  return <ul className={styles.cardList}>{children}</ul>;
 }
