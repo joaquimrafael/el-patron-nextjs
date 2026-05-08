@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-
+import ".src/components/serviceCard/serviceCard.css";
 const services = [
   {
     id: "corte-cabelo",
