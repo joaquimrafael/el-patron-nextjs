@@ -164,14 +164,6 @@ img {
   border-radius: 1rem;
 }
 
-.material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 0,
-    "wght" 400,
-    "GRAD" 0,
-    "opsz" 24;
-}
-
 /*Hover nos botões*/
 
 .large-button:hover {
@@ -269,19 +261,6 @@ img {
   max-width: 3rem;
   max-height: 3rem;
   overflow-wrap: break-word;
-}
-
-.carousel-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--red-normal);
-  color: var(--blue-normal);
-  border-radius: 100%;
-  width: 15vw;
-  aspect-ratio: 1 / 1;
-  max-width: 3.75rem;
-  cursor: pointer;
 }
 
 .text-input,
