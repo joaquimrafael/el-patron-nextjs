@@ -1,6 +1,6 @@
 .tag {
   background-color: var(--brown-dark);
-  color: var(--blue-normal);
+  color: #fff;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
   font-size: 0.875rem;
@@ -10,4 +10,14 @@
 
 .tag:hover {
   background-color: var(--brown-normal-hover);
+}
+
+.tagButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: inherit;
 }
