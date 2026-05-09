@@ -18,7 +18,7 @@
 
 ```sh
 # 1. Clonar o repositório
-git clone https://github.com/<org>/el-patron-nextjs.git
+git clone https://github.com/joaquimrafael/el-patron-nextjs.git
 cd el-patron-nextjs
 
 # 2. Instalar dependências
