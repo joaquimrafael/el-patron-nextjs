@@ -95,7 +95,7 @@ export default function Home() {
                 experientes que entendem que aparência é identidade. Venha nos
                 conhecer e saia como um verdadeiro patrão.
               </p>
-              <MediumButton text="Em breve..." />
+              <MediumButton text="Conheça o time" href="/equipe" />
             </div>
           </article>
         </section>
