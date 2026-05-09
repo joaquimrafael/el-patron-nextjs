@@ -1,4 +1,4 @@
-import styles from "@/components/tag/tag.module.css";
+import styles from "@/components/Tag/tag.module.css";
 
 export default function Tag({ name }) {
   const body = (

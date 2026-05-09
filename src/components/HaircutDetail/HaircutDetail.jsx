@@ -1,6 +1,6 @@
 import Image from "next/image";
 import TagList from "@/components/tagList/TagList";
-import Tag from "../tag/Tag";
+import Tag from "../Tag/Tag";
 import styles from "@/components/HaircutDetail/haircutDetail.module.css";
 
 export default function HaircutDetail({ haircut }) {
