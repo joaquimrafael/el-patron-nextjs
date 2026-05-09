@@ -138,6 +138,11 @@
   color: var(--silver-normal);
 }
 
+.servicesCta {
+  display: flex;
+  justify-content: center;
+}
+
 /* .contactUs — FALE CONOSCO */
 .contactUs {
   display: flex;

@@ -155,6 +155,9 @@ export default function Home() {
               </div>
             </article>
           </div>
+          <div className={styles.servicesCta}>
+            <LargeButton text="Saiba mais" href="/cortes" />
+          </div>
         </section>
 
         <section className={styles.contactUs} id="contact-us">
