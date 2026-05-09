@@ -1,4 +1,4 @@
-import styles from "@/components/carouselButton/carouselButton.module.css";
+import styles from "@/components/CarouselButton/carouselButton.module.css";
 
 export default function CarouselButton({ carouselFunction, direction }) {
   const buttonDirection = "chevron_" + direction;

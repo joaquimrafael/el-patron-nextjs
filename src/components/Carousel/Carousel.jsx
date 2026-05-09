@@ -1,6 +1,6 @@
 "use client";
 
-import CarouselButton from "@/components/carouselButton/CarouselButton";
+import CarouselButton from "@/components/CarouselButton/CarouselButton";
 import styles from "@/components/Carousel/carousel.module.css";
 import { useState } from "react";
 

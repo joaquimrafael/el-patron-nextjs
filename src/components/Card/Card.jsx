@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import styles from "@/components/card/card.module.css";
+import styles from "@/components/Card/card.module.css";
 
 export default function Card({ name, image, subtitle, href }) {
   const body = (
