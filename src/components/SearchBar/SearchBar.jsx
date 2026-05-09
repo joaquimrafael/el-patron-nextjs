@@ -1,4 +1,4 @@
-import styles from "@/components/searchBar/searchBar.module.css";
+import styles from "@/components/SearchBar/searchBar.module.css";
 
 export default function SearchBar({ placeholder = "Buscar..." }) {
   return (
