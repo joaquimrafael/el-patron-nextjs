@@ -8,7 +8,9 @@ import styles from "@/app/page.module.css";
 /* eslint-disable @next/next/no-img-element */
 
 const imgList = [
+  "/imgs/Screenshot 2026-04-02 at 21.27.30.png",
   "/imgs/Screenshot 2026-04-02 at 21.28.09.png",
+  "/imgs/Screenshot 2026-04-02 at 21.28.39.png",
   "/imgs/Screenshot 2026-04-02 at 21.40.22.png",
   "/imgs/Screenshot 2026-04-02 at 21.45.51.png",
 ];
