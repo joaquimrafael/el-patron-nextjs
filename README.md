@@ -66,6 +66,83 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 
 ---
 
+### Consumo de Dados
+
+As páginas `/cortes`, `/cortes/[hairstyle-id]` e `/equipe` são **Server Components `async`** que importam funções da camada de dados em `src/lib/`. Esse padrão centraliza o acesso aos dados em um único lugar e mantém os componentes de página enxutos — eles apenas compõem a interface a partir do que recebem.
+
+Hoje as funções retornam mocks no formato exato que a API externa devolverá; quando a [`hairstyle-api`](https://github.com/ggarabs/hairstyle-api) (desenvolvida pelo integrante Gustavo Garabetti em Clojure) estiver em produção, basta trocar o corpo das funções por um `fetch`, sem alterar nenhuma página.
+
+> **Decisão sobre a rota de API.** Após conversa com a professora, ficou alinhado que o grupo consome diretamente a API externa do próprio projeto (a `hairstyle-api`), em vez de criar uma rota interna `/api/...` dentro do Next.js que apenas devolveria um JSON estático. A API externa cumpre o mesmo papel didático — exercitar o consumo de dados com `fetch` — e ainda exercita uma integração real entre dois projetos desenvolvidos pelo grupo.
+
+**Camada de dados em `src/lib/haircuts.js`** — define o contrato consumido pelas páginas:
+
+```js
+// Mock que segue o formato exato da hairstyle-api: id, name, image, description, tags.
+const haircuts = [
+  {
+    id: "americano",
+    name: "Corte Americano",
+    image: "/imgs/Screenshot 2026-04-02 at 21.26.09.png",
+    description: "Corte clássico de inspiração norte-americana...",
+    tags: ["Clássico", "Degradê", "Curto"],
+  },
+  // ... demais cortes
+];
+
+// Versão resumida para o catálogo — somente os campos exibidos no Card.
+export async function getHaircuts() {
+  return haircuts.map(({ id, name, image }) => ({ id, name, image }));
+}
+
+// Busca um corte pelo id; devolve null para id inexistente (a página dispara notFound()).
+export async function getHaircut(id) {
+  return haircuts.find((haircut) => haircut.id === id) ?? null;
+}
+```
+
+**Consumo em `src/app/cortes/page.jsx`** — Server Component `async` que aguarda os dados antes de renderizar:
+
+```jsx
+import { getHaircuts } from "@/lib/haircuts";
+
+// Como é Server Component, a função pode ser declarada async e usar await diretamente —
+// sem useEffect, sem useState, sem flicker de loading no cliente.
+export default async function HairStylesPage() {
+  const items = await getHaircuts();
+
+  return (
+    <main className={styles.listPage}>
+      <h1>Nossos Cortes</h1>
+      <SearchBar placeholder="Buscar corte..." />
+      <CardList>
+        {items.map((item) => (
+          // Cada Card vira um <Link> para a rota dinâmica /cortes/[hairstyle-id].
+          <Card
+            key={item.id}
+            name={item.name}
+            image={item.image}
+            href={`/cortes/${item.id}`}
+          />
+        ))}
+      </CardList>
+    </main>
+  );
+}
+```
+
+Quando a integração com a `hairstyle-api` for ligada, a alteração fica restrita a `src/lib/haircuts.js` — as páginas não mudam:
+
+```js
+export async function getHaircuts() {
+  const res = await fetch("https://hairstyle-api.example.com/haircuts", {
+    next: { revalidate: 60 }, // revalida o cache do Next a cada 1 minuto
+  });
+  return res.json();
+}
+```
+
+---
+
 ### Novas Telas e Mudanças Principais
 
 #### 1. Tela de Listagem de Cortes — `/cortes`
@@ -152,6 +229,31 @@ src/
 | Navbar global | Extraída para o componente `Navbar` (client component) e renderizada no `layout.jsx`; o estado aberto/fechado vive em `useState` e é sincronizado ao breakpoint via `react-responsive` (`useMediaQuery`), substituindo a manipulação direta de DOM/`document.body.style` herdada do projeto original |
 | Camada de dados (`src/lib/`) | Funções `async` (`getHaircuts`, `getHaircut`, `getTeam`) já no contrato esperado da API; troca por `fetch` será pontual |
 | `hairstyle-api` | Em desenvolvimento no repositório externo; endpoints serão documentados conforme evoluem |
+
+---
+
+## Aprendizados
+
+Resumo do que ficou claro ao longo da migração para Next.js:
+
+- **Server Components vs Client Components.** No App Router todo componente é Server por padrão; só virou Client (`"use client";`) o que realmente precisa de estado ou efeito no navegador — `Navbar`, `Hamburger` e `Carousel`. As páginas de listagem e detalhe ficaram Server, o que elimina `useEffect` para buscar dados: basta `async` + `await` direto no componente.
+- **CSS Modules + globais.** `globals.css` guarda apenas _tokens (variáveis de cor, tipografia, reset) e regras herdadas do projeto original. Estilo específico de componente vive em `<nome>.module.css` co-locado, com classes acessadas via `styles.foo`. Isso resolve de vez os conflitos de classe global que tínhamos no Projeto 1.
+- **Rotas dinâmicas e 404 customizado.** A rota `/cortes/[hairstyle-id]` exercita o padrão de rota dinâmica do Next, e o `not-found.jsx` no mesmo segmento é renderizado automaticamente quando a página chama `notFound()` para um id inexistente — sem precisar tratar o erro manualmente na página.
+- **`params` agora é `Promise` no Next 16.** O destructuring precisa ser `const { "hairstyle-id": id } = await params;`. Detalhe que pegou o grupo no início: a página renderizava vazia silenciosamente sem erro evidente.
+- **Componentização real.** `Card` / `CardList` são reaproveitados entre `/cortes` (catálogo de cortes) e `/equipe` (barbeiros) apenas variando a prop opcional `subtitle`. É a vantagem prática do React sobre o HTML estático do Projeto 1 — o mesmo componente serve dois domínios diferentes sem duplicação.
+- **Estado encapsulado em vez de DOM imperativo.** No Projeto 1, abrir/fechar a navbar mexia em `document.body.style.gridTemplateColumns`. No Next, a `Navbar` é client component, controla `useState` interno e o JSX condiciona o render — código mais simples de testar e de raciocinar.
+
+---
+
+## Uso de IA
+
+O grupo declara o uso de IA generativa (Claude / Claude Code e ChatGPT) durante a execução do projeto, conforme as Diretrizes da disciplina. Finalidades específicas:
+
+- **Ideação e dúvidas pontuais:** explicação de hooks do React (`useState`, `useEffect`, `useMediaQuery`), diferença entre Server e Client Components no App Router e o padrão de `notFound()` para rotas dinâmicas.
+- **Debug de erros:** mensagens do Next 16 sobre `params` assíncrono, problemas de hidratação ao usar `react-responsive` no SSR e ajustes de configuração do ESLint.
+- **Apoio na redação deste README** (tutorial), revisão de estrutura e ortografia.
+
+A IA **não** foi utilizada como fonte autônoma de implementação: todo trecho de código produzido com apoio dela foi lido, ajustado e validado pelos integrantes. Conforme exigido pelas diretrizes, todos do grupo dominam a implementação, sabem justificar as decisões linha a linha e estão prontos para questionamentos nas apresentações e check-ins.
 
 ---
 
