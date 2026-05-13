@@ -77,12 +77,12 @@
     font-weight: 600;
   }
 
-  .navbar-link {
+  .navbarLink {
     padding: 0.5rem;
     transition: all 0.5s ease;
   }
 
-  .navbar-link:hover {
+  .navbarLink:hover {
     display: flex;
     align-items: center;
     border-radius: 0.3rem;

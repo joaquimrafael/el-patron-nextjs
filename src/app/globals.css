@@ -190,6 +190,16 @@ footer ul {
   justify-content: center;
 }
 
+footer ul li a {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  transition: all 0.5s ease;
+}
+
+footer ul li a:hover {
+  background-color: var(--brown-normal-hover);
+}
+
 /* DESKTOP — a partir de 768px */
 @media (min-width: 768px) {
   :root {
