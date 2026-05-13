@@ -24,11 +24,14 @@ cd el-patron-nextjs
 # 2. Instalar dependências
 npm install
 
-# 3. Rodar em modo desenvolvimento (http://localhost:3000)
+# 3. (Opcional) configurar a URL da hairstyle-api — padrão: http://localhost:8080
+echo 'NEXT_PUBLIC_HAIRSTYLE_API_URL=http://localhost:8080' > .env.local
+
+# 4. Rodar em modo desenvolvimento (http://localhost:3000)
 npm run dev
 ```
 
-> **Observação:** as telas `/cortes` e `/cortes/[hairstyle-id]` serão reimplementadas como **client components** (`"use client"`) buscando os cortes via `fetch` dentro de `useEffect`. Enquanto a [hairstyle-api](https://github.com/ggarabs/hairstyle-api) não estiver disponível, o `useEffect` chamará as funções mockadas em `src/lib/haircuts.js`; quando a API entrar no ar, o `fetch` passará a apontar diretamente para ela e a camada `src/lib/haircuts.js` será descontinuada.
+> **Observação:** as telas `/cortes` e `/cortes/[hairstyle-id]` são **client components** (`"use client"`) que buscam os cortes via `fetch` dentro de `useEffect`, batendo direto nas rotas `GET /api/hairstyles` e `GET /api/hairstyles/:id` da [hairstyle-api](https://github.com/ggarabs/hairstyle-api). A URL base é lida de `NEXT_PUBLIC_HAIRSTYLE_API_URL` (fallback `http://localhost:8080`); para o front funcionar é preciso ter a API rodando.
 
 ---
 
@@ -61,7 +64,7 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 - **React 19**
 - **JavaScript** puro (sem TypeScript)
 - **CSS3** — estilos globais em `globals.css` (portados do projeto original) somados a **CSS Modules** por componente em `src/components/*` (ex.: `card.module.css`, `cardList.module.css`)
-- Camada de dados em `src/lib/` (`haircuts.js`, `team.js`) com funções `async` que hoje devolvem mocks. `getTeam()` continua sendo consumida pela `/equipe` (Server Component); `getHaircuts()` e `getHaircut(id)` serão chamadas dentro de `useEffect` no cliente enquanto a `hairstyle-api` não estiver pronta, e serão removidas quando o `fetch` passar a apontar direto para a API
+- Camada de dados em `src/lib/`: `team.js` com `getTeam()` mockada (consumida pela `/equipe`, Server Component) e `haircuts.js` como **cliente HTTP da `hairstyle-api`** — concentra a URL base, o `fetch`, o mapeamento `main-image → image` e a semântica de `404 → null` para o detalhe. As páginas `/cortes` e `/cortes/[hairstyle-id]` consomem `getHaircuts()` / `getHaircut(id)` de dentro de um `useEffect` sem precisar saber dos detalhes da API
 - **hairstyle-api** como back-end externo — desenvolvida pelo integrante Gustavo Garabetti em Clojure, responsável por armazenar e disponibilizar os tipos de corte ([repositório](https://github.com/ggarabs/hairstyle-api))
 
 ---
@@ -70,39 +73,74 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 
 As telas dividem-se em dois padrões de consumo, conforme a fonte dos dados:
 
-**Cortes — fetch no cliente (`useEffect`).** `/cortes` e `/cortes/[hairstyle-id]` serão **client components** (`"use client"`) que disparam o `fetch` dentro de um `useEffect`, controlando localmente os estados de carregamento e erro. A integração externa fica restrita a essas duas telas: o destino final do `fetch` é a [`hairstyle-api`](https://github.com/ggarabs/hairstyle-api) (desenvolvida pelo integrante Gustavo Garabetti em Clojure). Enquanto a API não estiver pronta, o `useEffect` chama as funções `getHaircuts()` / `getHaircut(id)` em `src/lib/haircuts.js`, que devolvem mocks no formato exato que a API entregará — assim, na migração, basta trocar a origem de dentro do `useEffect` sem mexer na estrutura da página.
+**Cortes — fetch no cliente (`useEffect`) via `src/lib/haircuts.js`.** `/cortes` e `/cortes/[hairstyle-id]` são **client components** (`"use client"`) que disparam o `fetch` dentro de um `useEffect`, controlando localmente os estados de carregamento, erro e ausência (404). O `fetch` em si é encapsulado em `src/lib/haircuts.js`, que age como cliente HTTP da [`hairstyle-api`](https://github.com/ggarabs/hairstyle-api) (desenvolvida pelo integrante Gustavo Garabetti em Clojure): a listagem bate em `GET /api/hairstyles` e o detalhe em `GET /api/hairstyles/:id`. A URL base sai de `process.env.NEXT_PUBLIC_HAIRSTYLE_API_URL`, com fallback para `http://localhost:8080`. O cliente também adapta o payload (renomeia `main-image` para `image`) e converte `404` em `null`, deixando as páginas com lógica enxuta: chamar `getHaircuts()` / `getHaircut(id)` e renderizar o resultado.
 
 **Equipe — Server Component `async`.** `/equipe` segue padrão diferente: é um Server Component `async` que chama `getTeam()` em `src/lib/team.js` e renderiza no servidor com os dados já resolvidos. A `hairstyle-api` cobre apenas o catálogo de cortes, então a equipe permanece como lista fixa mantida em código (nome, especialidade e foto de cada barbeiro), sem necessidade de `fetch` no cliente.
 
 > **Decisão sobre a rota de API.** Após conversa com a professora, ficou alinhado que o grupo consome diretamente a API externa do próprio projeto (a `hairstyle-api`), em vez de criar uma rota interna `/api/...` dentro do Next.js que apenas devolveria um JSON estático. A API externa cumpre o mesmo papel didático — exercitar o consumo de dados com `fetch` — e ainda exercita uma integração real entre dois projetos desenvolvidos pelo grupo.
 
-**Camada de dados em `src/lib/haircuts.js`** — define o contrato consumido (hoje pelo Server Component, em breve pelo `useEffect` no cliente) e segue o formato esperado da API:
+**Contrato da `hairstyle-api`** — o cliente em `src/lib/haircuts.js` recebe os payloads abaixo e devolve dados já adaptados:
 
-```js
-// Mock que segue o formato exato da hairstyle-api: id, name, image, description, tags.
-const haircuts = [
+```jsonc
+// GET /api/hairstyles  →  listagem (usada na /cortes)
+[
   {
-    id: "americano",
-    name: "Corte Americano",
-    image: "/imgs/Screenshot 2026-04-02 at 21.26.09.png",
-    description: "Corte clássico de inspiração norte-americana...",
-    tags: ["Clássico", "Degradê", "Curto"],
-  },
-  // ... demais cortes
-];
+    "id": 1,
+    "name": "Buzz Cut",
+    "description": "Minimal short hairstyle",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "https://example.com/image.jpg"
+  }
+]
 
-// Versão resumida para o catálogo — somente os campos exibidos no Card.
-export async function getHaircuts() {
-  return haircuts.map(({ id, name, image }) => ({ id, name, image }));
-}
-
-// Busca um corte pelo id; devolve null para id inexistente (a página dispara notFound()).
-export async function getHaircut(id) {
-  return haircuts.find((haircut) => haircut.id === id) ?? null;
+// GET /api/hairstyles/:id  →  detalhe (usado em /cortes/[hairstyle-id])
+{
+  "id": 1,
+  "name": "Buzz Cut",
+  "slug": "buzz-cut",
+  "description": "Minimal short hairstyle",
+  "texture": ["straight"],
+  "length": "short",
+  "main-image": "https://example.com/image.jpg",
+  "gallery": ["https://example.com/1.jpg"],
+  "tags": ["clássico"]
 }
 ```
 
-**Consumo em `src/app/cortes/page.jsx` e `src/app/cortes/[hairstyle-id]/page.jsx`** — implementação cliente pendente. Ambas as páginas serão marcadas como `"use client"` e usarão `useEffect` para popular o estado local: durante a fase mockada, o efeito chama `getHaircuts()` / `getHaircut(id)`; na migração final, o efeito passa a fazer `fetch` direto contra a `hairstyle-api`. Os estados de carregamento e erro são tratados localmente em cada tela.
+**Cliente em `src/lib/haircuts.js`** — duas responsabilidades: encapsular o `fetch` e devolver dados no formato que os componentes esperam:
+
+```js
+const API_URL =
+  process.env.NEXT_PUBLIC_HAIRSTYLE_API_URL ?? "http://localhost:8080";
+
+// Renomeia main-image → image e normaliza tags ausentes para [].
+function adapt(haircut) {
+  return {
+    id: haircut.id,
+    name: haircut.name,
+    image: haircut["main-image"],
+    description: haircut.description,
+    tags: haircut.tags ?? [],
+  };
+}
+
+export async function getHaircuts({ signal } = {}) {
+  const res = await fetch(`${API_URL}/api/hairstyles`, { signal });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()).map(adapt);
+}
+
+// 404 vira null para a página acionar notFound(); demais erros sobem como exceção.
+export async function getHaircut(id, { signal } = {}) {
+  const res = await fetch(`${API_URL}/api/hairstyles/${id}`, { signal });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return adapt(await res.json());
+}
+```
+
+Assim as páginas ficam só com `useEffect` + estado: quando `getHaircut(id)` devolve `null` (id inexistente na API), a página dispara `notFound()` e o `not-found.jsx` do segmento dinâmico é renderizado.
 
 ---
 
@@ -110,11 +148,11 @@ export async function getHaircut(id) {
 
 #### 1. Tela de Listagem de Cortes — `/cortes`
 
-Catálogo com todos os tipos de corte oferecidos pela barbearia, a ser alimentado pela **hairstyle-api**. Exibe os cortes em cards (componente `Card` dentro de `CardList`), cada um com nome e imagem, e o card inteiro funciona como link para a página de detalhe correspondente. A página será reimplementada como **client component** (`"use client"`) buscando os dados em um `useEffect`: durante a fase mockada, o efeito chamará `getHaircuts()` em `src/lib/haircuts.js` (mock no formato exato esperado da API); na sequência, passará a fazer `fetch` direto na `hairstyle-api`. A tela já apresenta o layout final, com grade responsiva (cards em coluna no mobile e em grid no desktop) e campo de busca (`SearchBar`) como _stub_ visual.
+Catálogo com todos os tipos de corte oferecidos pela barbearia, alimentado pela **hairstyle-api**. Exibe os cortes em cards (componente `Card` dentro de `CardList`), cada um com nome e imagem, e o card inteiro funciona como link para a página de detalhe correspondente. A página é um **client component** (`"use client"`) que busca os dados em um `useEffect` chamando `getHaircuts()` do cliente em `src/lib/haircuts.js` — quem fala com `GET /api/hairstyles` e adapta `main-image → image`. A tela já apresenta o layout final, com grade responsiva (cards em coluna no mobile e em grid no desktop), estado de carregamento, mensagem de erro e busca (`SearchBar`) com filtro client-side por nome (case-insensitive, ignorando acentos).
 
 #### 2. Tela Dinâmica de Detalhe — `/cortes/[hairstyle-id]`
 
-Página individual de cada corte, acessada a partir da listagem. Também será reimplementada como **client component** que lê o `hairstyle-id` da URL (via `useParams()` do `next/navigation`) e busca o corte dentro de `useEffect`: durante a fase mockada, chamando `getHaircut(id)`; em seguida, via `fetch` direto na API. A renderização é delegada ao componente `HaircutDetail`, que exibe nome, imagem, descrição e a lista de tags (`TagList` + `Tag`) — preço e duração estimada serão acrescentados junto com a integração da API. A página 404 customizada está implementada em `not-found.jsx` no mesmo segmento dinâmico, exibindo mensagem amigável e botão de retorno ao catálogo quando o id buscado não existir.
+Página individual de cada corte, acessada a partir da listagem. Também é um **client component** que lê o `hairstyle-id` da URL via `useParams()` do `next/navigation` e chama `getHaircut(id)` do cliente em `src/lib/haircuts.js` dentro de `useEffect` (a função encapsula `GET /api/hairstyles/:id` e devolve `null` quando a API responde `404`). A renderização é delegada ao `HaircutDetail`, que exibe nome, imagem, descrição e a lista de tags (`TagList` + `Tag`) — preço e duração estimada serão acrescentados conforme a API evoluir. Quando o cliente devolve `null`, a página dispara `notFound()`, acionando o `not-found.jsx` do segmento dinâmico (tela amigável com botão de retorno ao catálogo).
 
 #### 3. hairstyle-api
 
@@ -136,7 +174,7 @@ Para evitar duplicação entre `/cortes` e `/equipe` (e preparar terreno para a 
 | ---------- | ---------------- |
 | `Navbar` / `Hamburger` | Navbar global renderizada no `layout.jsx`; client component que controla o estado aberto/fechado via `useState` e adapta o comportamento ao breakpoint com `react-responsive` (`useMediaQuery`). O `Hamburger` recebe o handler de toggle por prop |
 | `Card` / `CardList` | Card de imagem com título e subtítulo opcional, encapsulado por um `Link` quando `href` é informado; usado tanto pela listagem de cortes quanto pela equipe |
-| `SearchBar` | Campo de busca com ícone Material Symbols — atualmente _stub_ visual em `/cortes` |
+| `SearchBar` | Campo de busca controlado (`value` / `onChange`) com ícone Material Symbols — usado em `/cortes` para filtrar o catálogo por nome no cliente |
 | `HaircutDetail` | Composição da tela de detalhe (nome, imagem via `next/image`, tags e descrição) |
 | `Tag` / `TagList` | Lista horizontal de tags exibida na tela de detalhe |
 | `LargeButton` / `MediumButton` / `SmallButton` | Botões reutilizáveis com variantes de tamanho (CSS Modules) |
@@ -158,24 +196,25 @@ src/
 │   │   ├── page.jsx               → Tela da equipe (Server Component async)
 │   │   └── page.module.css
 │   └── cortes/
-│       ├── page.jsx               → Catálogo de cortes (será client component com useEffect + fetch)
+│       ├── page.jsx               → Catálogo de cortes (client component, useEffect chamando lib/haircuts.js)
 │       ├── page.module.css
 │       └── [hairstyle-id]/
-│           ├── page.jsx           → Detalhe dinâmico (será client component com useEffect + fetch)
+│           ├── page.jsx           → Detalhe dinâmico (client component, useEffect chamando lib/haircuts.js)
+│           ├── page.module.css    → Estilos dos estados de loading/erro do detalhe
 │           ├── not-found.jsx      → Página 404 customizada do segmento dinâmico
 │           └── not-found.module.css
 ├── components/
 │   ├── Navbar/                    → Navbar global (client component, react-responsive)
 │   ├── Hamburger/                 → Botão da navbar mobile, recebe o toggle por prop
 │   ├── Card/ , CardList/          → Card e lista, usados em /cortes e /equipe
-│   ├── SearchBar/                 → SearchBar (stub visual em /cortes)
+│   ├── SearchBar/                 → Input controlado usado em /cortes para filtrar o catálogo no cliente
 │   ├── HaircutDetail/             → Composição da tela de detalhe
 │   ├── Tag/ , TagList/            → Tag e TagList exibidas no detalhe
 │   ├── LargeButton/ , MediumButton/ , SmallButton/  → Botões com variantes de tamanho
 │   ├── Carousel/ , CarouselButton/  → Carrossel da home e botão chevron
 │   └── ServiceCard/               → Card da seção de serviços da home
 └── lib/
-    ├── haircuts.js                → getHaircuts(), getHaircut(id) — mocks usados pelo useEffect até o fetch passar a apontar direto na hairstyle-api
+    ├── haircuts.js                → Cliente HTTP da hairstyle-api: getHaircuts(), getHaircut(id); adapta main-image → image e 404 → null
     └── team.js                    → getTeam() — mock consumido pela /equipe (Server Component)
 ```
 
@@ -186,12 +225,12 @@ src/
 | Tela / Rota | Status |
 | ----------- | ------ |
 | `/` — Home (landing page) | Migrada do projeto original, mantendo o comportamento de DOM/`localStorage` |
-| `/cortes` — Listagem | Migração para **client component** (`"use client"` + `useEffect` + `fetch`) pendente. Layout final com `Card`/`CardList`, grade responsiva e `SearchBar` como _stub_ já implementados; consumo da `hairstyle-api` será feito direto do cliente quando a API estiver disponível |
-| `/cortes/[hairstyle-id]` — Detalhe | Migração para **client component** com `useEffect` + `fetch` pendente. Renderiza `HaircutDetail` (nome, imagem, tags e descrição); 404 customizada (`not-found.jsx`) já implementada; consumo da `hairstyle-api` no cliente pendente |
+| `/cortes` — Listagem | **Client component** chamando `getHaircuts()` do cliente em `src/lib/haircuts.js` (que bate em `GET /api/hairstyles`) dentro de `useEffect`, com estados de carregamento e erro; layout final com `Card`/`CardList`, grade responsiva e `SearchBar` filtrando o catálogo por nome no cliente |
+| `/cortes/[hairstyle-id]` — Detalhe | **Client component** lendo o slug via `useParams()` e chamando `getHaircut(id)` do cliente em `src/lib/haircuts.js` (`GET /api/hairstyles/:id`, 404 → `null`) dentro de `useEffect`; quando o cliente devolve `null`, a página dispara `notFound()` → `not-found.jsx`; renderiza `HaircutDetail` (nome, imagem, tags e descrição) |
 | `/equipe` — Equipe | Server Component `async` consumindo `getTeam()` (mock em `src/lib/team.js`); layout final reutilizando `Card`/`CardList` com `subtitle` para a especialidade; dados definitivos, tempo de casa e link para Instagram pendentes |
 | Navbar global | Extraída para o componente `Navbar` (client component) e renderizada no `layout.jsx`; o estado aberto/fechado vive em `useState` e é sincronizado ao breakpoint via `react-responsive` (`useMediaQuery`), substituindo a manipulação direta de DOM/`document.body.style` herdada do projeto original |
-| Camada de dados (`src/lib/`) | Funções `async` (`getHaircuts`, `getHaircut`, `getTeam`) servindo como mock no formato esperado da API; `getHaircuts`/`getHaircut` continuam ali enquanto o `useEffect` das telas de corte ainda não chama a API direta, e serão descontinuadas na migração; `getTeam` permanece mockada (a equipe não é coberta pela API) |
-| `hairstyle-api` | Em desenvolvimento no repositório externo; endpoints serão documentados conforme evoluem |
+| Camada de dados (`src/lib/`) | `team.js` com `getTeam()` `async` mockada (consumida pela `/equipe`, Server Component); `haircuts.js` é o cliente HTTP da `hairstyle-api`, com `getHaircuts()` / `getHaircut(id)` encapsulando URL base, `fetch`, adaptação `main-image → image` e a regra `404 → null` |
+| `hairstyle-api` | Integração ativa nas duas telas de corte (`GET /api/hairstyles` e `GET /api/hairstyles/:id`); URL base configurável via `NEXT_PUBLIC_HAIRSTYLE_API_URL` (fallback `http://localhost:8080`) |
 
 ---
 
@@ -199,10 +238,10 @@ src/
 
 Resumo do que ficou claro ao longo da migração para Next.js:
 
-- **Server Components vs Client Components.** No App Router todo componente é Server por padrão; só vira Client (`"use client";`) o que precisa de estado, efeito no navegador ou consumo dinâmico de API — `Navbar`, `Hamburger`, `Carousel` e, na próxima etapa, as telas `/cortes` e `/cortes/[hairstyle-id]`, que vão buscar os cortes via `useEffect` + `fetch` (passando pelo mock de `src/lib/haircuts.js` enquanto a `hairstyle-api` não está pronta e, em seguida, direto contra a API). A `/equipe` continua Server Component `async`, com `getTeam()` resolvido no servidor antes do render.
+- **Server Components vs Client Components.** No App Router todo componente é Server por padrão; só vira Client (`"use client";`) o que precisa de estado, efeito no navegador ou consumo dinâmico de API — `Navbar`, `Hamburger`, `Carousel` e as telas `/cortes` e `/cortes/[hairstyle-id]`, que buscam os cortes na `hairstyle-api` via `useEffect` + `fetch`. A `/equipe` continua Server Component `async`, com `getTeam()` resolvido no servidor antes do render.
 - **CSS Modules + globais.** `globals.css` guarda apenas _tokens (variáveis de cor, tipografia, reset) e regras herdadas do projeto original. Estilo específico de componente vive em `<nome>.module.css` co-locado, com classes acessadas via `styles.foo`. Isso resolve de vez os conflitos de classe global que tínhamos no Projeto 1.
 - **Rotas dinâmicas e 404 customizado.** A rota `/cortes/[hairstyle-id]` exercita o padrão de rota dinâmica do Next, e o `not-found.jsx` no mesmo segmento é renderizado automaticamente quando a página chama `notFound()` para um id inexistente — sem precisar tratar o erro manualmente na página.
-- **`params` agora é `Promise` no Next 16.** O destructuring precisa ser `const { "hairstyle-id": id } = await params;`. Detalhe que pegou o grupo no início: a página renderizava vazia silenciosamente sem erro evidente.
+- **`params` em Server vs Client Components.** No Next 16, em Server Components o `params` é `Promise` e exige `const { "hairstyle-id": id } = await params;` — detalhe que pegou o grupo no início, porque sem o `await` a página renderizava vazia sem erro evidente. Com a migração da tela de detalhe para Client Component, o caminho passou a ser `useParams()` do `next/navigation`, que devolve o objeto sincronamente.
 - **Componentização real.** `Card` / `CardList` são reaproveitados entre `/cortes` (catálogo de cortes) e `/equipe` (barbeiros) apenas variando a prop opcional `subtitle`. É a vantagem prática do React sobre o HTML estático do Projeto 1 — o mesmo componente serve dois domínios diferentes sem duplicação.
 - **Estado encapsulado em vez de DOM imperativo.** No Projeto 1, abrir/fechar a navbar mexia em `document.body.style.gridTemplateColumns`. No Next, a `Navbar` é client component, controla `useState` interno e o JSX condiciona o render — código mais simples de testar e de raciocinar.
 

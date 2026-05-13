@@ -8,7 +8,7 @@
 
 import styles from "@/components/SearchBar/searchBar.module.css";
 
-export default function SearchBar({ placeholder = "Buscar..." }) {
+export default function SearchBar({ placeholder = "Buscar...", value, onChange }) {
   return (
     <label className={styles.searchBar}>
       <span
@@ -16,7 +16,12 @@ export default function SearchBar({ placeholder = "Buscar..." }) {
       >
         search
       </span>
-      <input type="search" placeholder={placeholder} />
+      <input
+        type="search"
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
     </label>
   );
 }

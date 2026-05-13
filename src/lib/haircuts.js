@@ -6,45 +6,30 @@
  * Erick Guilherme de Macedo Cabral — 10419996
  */
 
-const haircuts = [
-  {
-    id: "americano",
-    name: "Corte Americano",
-    image: "/imgs/Screenshot 2026-04-02 at 21.26.09.png",
-    description:
-      "Corte clássico de inspiração norte-americana, com laterais bem marcadas e topo com volume. Combina precisão na máquina e finalização na tesoura, garantindo um visual limpo e versátil para o dia a dia.",
-    tags: ["Clássico", "Degradê", "Curto"],
-  },
-  {
-    id: "jaca",
-    name: "Corte do Jaca",
-    image: "/imgs/Screenshot 2026-04-02 at 21.26.17.png",
-    description:
-      "Estilo autoral da casa, com laterais raspadas e topo levemente desfiado. Pensado para quem busca um corte marcante, prático de manter e que valoriza o formato natural do rosto.",
-    tags: ["Autoral", "Moderno", "Médio"],
-  },
-  {
-    id: "combo",
-    name: "Combo Corte + Barba",
-    image: "/imgs/Screenshot 2026-04-02 at 21.26.41.png",
-    description:
-      "Pacote completo: corte de cabelo personalizado e tratamento de barba com toalha quente, óleos premium e finalização com navalha. Ideal para sair da barbearia totalmente renovado.",
-    tags: ["Combo", "Barba", "Completo"],
-  },
-  {
-    id: "fade",
-    name: "Fade Clássico",
-    image: "/imgs/general-img-square.png",
-    description:
-      "Degradê suave da nuca até o topo, executado em diferentes alturas (low, mid, high) conforme o seu estilo. O fade clássico é a base de quem gosta de manter o visual sempre alinhado.",
-    tags: ["Fade", "Degradê", "Moderno"],
-  },
-];
+const API_URL =
+  process.env.NEXT_PUBLIC_HAIRSTYLE_API_URL ?? "http://localhost:8080";
 
-export async function getHaircuts() {
-  return haircuts.map(({ id, name, image }) => ({ id, name, image }));
+function adapt(haircut) {
+  return {
+    id: haircut.id,
+    name: haircut.name,
+    image: haircut["main-image"],
+    description: haircut.description,
+    tags: haircut.tags ?? [],
+  };
 }
 
-export async function getHaircut(id) {
-  return haircuts.find((haircut) => haircut.id === id) ?? null;
+export async function getHaircuts({ signal } = {}) {
+  const res = await fetch(`${API_URL}/api/hairstyles`, { signal });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return data.map(adapt);
+}
+
+export async function getHaircut(id, { signal } = {}) {
+  const res = await fetch(`${API_URL}/api/hairstyles/${id}`, { signal });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return adapt(data);
 }

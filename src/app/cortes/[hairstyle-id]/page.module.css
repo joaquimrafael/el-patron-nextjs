@@ -1,0 +1,25 @@
+/*
+ * Gustavo Garabetti Munhoz — 10409258
+ * João Pedro Rodrigues Vieira — 10403595
+ * Joaquim Rafael Mariano Prieto Pereira — 10408805
+ * Caio Yukio Yazawa — 10418604
+ * Erick Guilherme de Macedo Cabral — 10419996
+ */
+
+.statusPage {
+  width: 100%;
+  max-width: 50rem;
+  margin-inline: auto;
+  padding: 5rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .statusPage {
+    padding: 7rem 2rem 3rem;
+  }
+}
