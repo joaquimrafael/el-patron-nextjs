@@ -61,7 +61,7 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 - **React 19**
 - **JavaScript** puro (sem TypeScript)
 - **CSS3** — estilos globais em `globals.css` (portados do projeto original) somados a **CSS Modules** por componente em `src/components/*` (ex.: `card.module.css`, `cardList.module.css`)
-- Camada de dados em `src/lib/` (`haircuts.js`, `team.js`) com funções `async` que hoje devolvem mocks e serão substituídas pelo consumo da API sem alterar a assinatura usada pelas páginas
+- Camada de dados em `src/lib/` (`haircuts.js`, `team.js`) com funções `async` que hoje devolvem mocks; as funções de cortes serão substituídas pelo consumo da `hairstyle-api` sem alterar a assinatura usada pelas páginas, enquanto a função de equipe (`getTeam()`) permanece com dados mockados — a API cobre apenas o catálogo de cortes
 - **hairstyle-api** como back-end externo — desenvolvida pelo integrante Gustavo Garabetti em Clojure, responsável por armazenar e disponibilizar os tipos de corte ([repositório](https://github.com/ggarabs/hairstyle-api))
 
 ---
@@ -70,7 +70,9 @@ A nova aplicação adota o **App Router** do Next.js 16, com o código-fonte org
 
 As páginas `/cortes`, `/cortes/[hairstyle-id]` e `/equipe` são **Server Components `async`** que importam funções da camada de dados em `src/lib/`. Esse padrão centraliza o acesso aos dados em um único lugar e mantém os componentes de página enxutos — eles apenas compõem a interface a partir do que recebem.
 
-Hoje as funções retornam mocks no formato exato que a API externa devolverá; quando a [`hairstyle-api`](https://github.com/ggarabs/hairstyle-api) (desenvolvida pelo integrante Gustavo Garabetti em Clojure) estiver em produção, basta trocar o corpo das funções por um `fetch`, sem alterar nenhuma página.
+A integração com API externa fica restrita aos **cortes**: `getHaircuts()` e `getHaircut(id)` em `src/lib/haircuts.js` retornam mocks no formato exato que a [`hairstyle-api`](https://github.com/ggarabs/hairstyle-api) (desenvolvida pelo integrante Gustavo Garabetti em Clojure) devolverá; quando a API estiver em produção, basta trocar o corpo dessas duas funções por um `fetch`, sem alterar nenhuma página.
+
+A página `/equipe`, por outro lado, segue o mesmo padrão de Server Component `async` chamando `getTeam()` em `src/lib/team.js`, mas **permanece com dados mockados** — a `hairstyle-api` cobre apenas o catálogo de cortes, e a equipe é exibida a partir de uma lista fixa mantida em código (nome, especialidade e foto de cada barbeiro). Isso reforça o valor da camada `src/lib/`: cada página chama uma função com a mesma assinatura, e a origem real dos dados (mock fixo ou `fetch` na API) é um detalhe de implementação encapsulado.
 
 > **Decisão sobre a rota de API.** Após conversa com a professora, ficou alinhado que o grupo consome diretamente a API externa do próprio projeto (a `hairstyle-api`), em vez de criar uma rota interna `/api/...` dentro do Next.js que apenas devolveria um JSON estático. A API externa cumpre o mesmo papel didático — exercitar o consumo de dados com `fetch` — e ainda exercita uma integração real entre dois projetos desenvolvidos pelo grupo.
 
@@ -227,7 +229,7 @@ src/
 | `/cortes/[hairstyle-id]` — Detalhe | Server Component `async` consumindo `getHaircut(id)`; renderiza `HaircutDetail` (nome, imagem via `next/image`, tags e descrição); 404 customizada (`not-found.jsx`) ativa via `notFound()`; consumo da API pendente |
 | `/equipe` — Equipe | Server Component `async` consumindo `getTeam()` (mock em `src/lib/team.js`); layout final reutilizando `Card`/`CardList` com `subtitle` para a especialidade; dados definitivos, tempo de casa e link para Instagram pendentes |
 | Navbar global | Extraída para o componente `Navbar` (client component) e renderizada no `layout.jsx`; o estado aberto/fechado vive em `useState` e é sincronizado ao breakpoint via `react-responsive` (`useMediaQuery`), substituindo a manipulação direta de DOM/`document.body.style` herdada do projeto original |
-| Camada de dados (`src/lib/`) | Funções `async` (`getHaircuts`, `getHaircut`, `getTeam`) já no contrato esperado da API; troca por `fetch` será pontual |
+| Camada de dados (`src/lib/`) | Funções `async` (`getHaircuts`, `getHaircut`, `getTeam`) com o mesmo contrato; `getHaircuts`/`getHaircut` passarão a fazer `fetch` na `hairstyle-api`, e `getTeam` continua com mock (a equipe não é coberta pela API) |
 | `hairstyle-api` | Em desenvolvimento no repositório externo; endpoints serão documentados conforme evoluem |
 
 ---
