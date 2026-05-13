@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Buzz Cut",
+    "slug": "buzz-cut",
+    "description": "Corte militar clássico, raspado de forma uniforme.",
+    "texture": ["straight", "wavy", "curly", "coily"],
+    "length": "short",
+    "main-image": "/public/imgs/buzzcut.png",
+    "gallery": ["/public/imgs/buzz-1.png", "/public/imgs/buzz-2.png"],
+    "tags": ["clássico", "curto", "prático"]
+  },
+  {
+    "name": "Low Fade",
+    "slug": "low-fade",
+    "description": "Degradê começando bem baixo, próximo à orelha.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/low-fade.png",
+    "gallery": [],
+    "tags": ["moderno", "degradê"]
+  },
+  {
+    "name": "Mid Fade",
+    "slug": "mid-fade",
+    "description": "Degradê médio, um equilíbrio entre o clássico e o moderno.",
+    "texture": ["straight", "wavy", "curly"],
+    "length": "short",
+    "main-image": "/public/imgs/mid-fade.png",
+    "gallery": [],
+    "tags": ["popular", "estilo"]
+  },
+  {
+    "name": "High Fade",
+    "slug": "high-fade",
+    "description": "Degradê alto, com as laterais bem raspadas até o topo.",
+    "texture": ["straight", "curly"],
+    "length": "short",
+    "main-image": "/public/imgs/high-fade.png",
+    "gallery": [],
+    "tags": ["ousado", "limpo"]
+  },
+  {
+    "name": "Pompadour",
+    "slug": "pompadour",
+    "description": "Topete volumoso penteado para trás.",
+    "texture": ["straight", "wavy"],
+    "length": "medium",
+    "main-image": "/public/imgs/pompadour.png",
+    "gallery": [],
+    "tags": ["vintage", "volume"]
+  },
+  {
+    "name": "Slick Back",
+    "slug": "slick-back",
+    "description": "Cabelo todo penteado para trás com gel ou pomada.",
+    "texture": ["straight"],
+    "length": "medium",
+    "main-image": "/public/imgs/slick-back.png",
+    "gallery": [],
+    "tags": ["formal", "clássico"]
+  },
+  {
+    "name": "Crew Cut",
+    "slug": "crew-cut",
+    "description": "Corte curto e prático, levemente maior no topo.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/crew-cut.png",
+    "gallery": [],
+    "tags": ["esportivo", "baixo"]
+  },
+  {
+    "name": "Mohawk Fade",
+    "slug": "mohawk-fade",
+    "description": "Estilo moicano com as laterais em degradê.",
+    "texture": ["curly", "coily"],
+    "length": "medium",
+    "main-image": "/public/imgs/mohawk-fade.png",
+    "gallery": [],
+    "tags": ["moicano", "estilo"]
+  },
+  {
+    "name": "Flat Top",
+    "slug": "flat-top",
+    "description": "Topo reto e quadrado, muito comum em crespos.",
+    "texture": ["coily"],
+    "length": "short",
+    "main-image": "/public/imgs/flat-top.png",
+    "gallery": [],
+    "tags": ["quadrado", "retrô"]
+  },
+  {
+    "name": "Side Part",
+    "slug": "side-part",
+    "description": "Corte clássico repartido para o lado com risca.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/side-part.png",
+    "gallery": [],
+    "tags": ["executivo", "risca"]
+  },
+  {
+    "name": "French Crop",
+    "slug": "french-crop",
+    "description": "Corte com franja curta e textura no topo.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/french-crop.png",
+    "gallery": [],
+    "tags": ["tendência", "textura"]
+  },
+  {
+    "name": "Undercut",
+    "slug": "undercut",
+    "description": "Laterais raspadas e topo bem longo.",
+    "texture": ["straight", "wavy", "curly"],
+    "length": "medium",
+    "main-image": "/public/imgs/undercut.png",
+    "gallery": [],
+    "tags": ["moderno", "desconectado"]
+  },
+  {
+    "name": "Mullet Moderno",
+    "slug": "mullet-moderno",
+    "description": "Curto na frente e nas laterais, longo atrás.",
+    "texture": ["wavy", "curly"],
+    "length": "medium",
+    "main-image": "/public/imgs/mullet.png",
+    "gallery": [],
+    "tags": ["ousado", "alternativo"]
+  },
+  {
+    "name": "Top Knot",
+    "slug": "top-knot",
+    "description": "Coque samurai com as laterais raspadas.",
+    "texture": ["straight", "wavy"],
+    "length": "long",
+    "main-image": "/public/imgs/top-knot.png",
+    "gallery": [],
+    "tags": ["samurai", "longo"]
+  },
+  {
+    "name": "Taper Fade",
+    "slug": "taper-fade",
+    "description": "Degradê apenas na nuca e costeletas.",
+    "texture": ["straight", "wavy", "curly", "coily"],
+    "length": "short",
+    "main-image": "/public/imgs/taper.png",
+    "gallery": [],
+    "tags": ["discreto", "limpo"]
+  },
+  {
+    "name": "Bowl Cut Moderno",
+    "slug": "bowl-cut-moderno",
+    "description": "Corte tigela repaginado com textura.",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "/public/imgs/bowl-cut.png",
+    "gallery": [],
+    "tags": ["conceito", "fashion"]
+  },
+  {
+    "name": "Ivy League",
+    "slug": "ivy-league",
+    "description": "Um Crew Cut mais longo e elegante.",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "/public/imgs/ivy-league.png",
+    "gallery": [],
+    "tags": ["social", "elegante"]
+  },
+  {
+    "name": "Burst Fade",
+    "slug": "burst-fade",
+    "description": "Degradê em formato circular em volta da orelha.",
+    "texture": ["curly", "coily"],
+    "length": "short",
+    "main-image": "/public/imgs/burst-fade.png",
+    "gallery": [],
+    "tags": ["circular", "atleta"]
+  },
+  {
+    "name": "Caesar Cut",
+    "slug": "caesar-cut",
+    "description": "Franja horizontal curta e laterais uniformes.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/caesar.png",
+    "gallery": [],
+    "tags": ["franja", "romano"]
+  },
+  {
+    "name": "Afro Natural",
+    "slug": "afro-natural",
+    "description": "Cabelo crespo mantido volumoso.",
+    "texture": ["coily"],
+    "length": "medium",
+    "main-image": "/public/imgs/afro.png",
+    "gallery": [],
+    "tags": ["volume", "identidade"]
+  },
+  {
+    "name": "Dreadlocks",
+    "slug": "dreadlocks",
+    "description": "Cabelos emaranhados em fios definidos.",
+    "texture": ["curly", "coily"],
+    "length": "long",
+    "main-image": "/public/imgs/dreads.png",
+    "gallery": [],
+    "tags": ["cultural", "estilo"]
+  },
+  {
+    "name": "Surfer Hair",
+    "slug": "surfer-hair",
+    "description": "Cabelo médio, despojado e natural.",
+    "texture": ["wavy"],
+    "length": "medium",
+    "main-image": "/public/imgs/surfer.png",
+    "gallery": [],
+    "tags": ["praia", "despojado"]
+  },
+  {
+    "name": "Butch Cut",
+    "slug": "butch-cut",
+    "description": "Variação do Buzz Cut, um pouco mais longa.",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "/public/imgs/butch.png",
+    "gallery": [],
+    "tags": ["militar", "praticidade"]
+  },
+  {
+    "name": "Comb Over",
+    "slug": "comb-over",
+    "description": "Cabelo penteado para o lado cobrindo o topo.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/comb-over.png",
+    "gallery": [],
+    "tags": ["tradicional", "penteado"]
+  },
+  {
+    "name": "Shaggy Cut",
+    "slug": "shaggy-cut",
+    "description": "Corte repicado e bagunçado com camadas.",
+    "texture": ["wavy", "curly"],
+    "length": "medium",
+    "main-image": "/public/imgs/shaggy-cut.png",
+    "gallery": [],
+    "tags": ["repicado", "anos-70"]
+  },
+  {
+    "name": "Faux Hawk",
+    "slug": "faux-hawk",
+    "description": "Falso moicano, discreto para o dia a dia.",
+    "texture": ["straight", "wavy"],
+    "length": "short",
+    "main-image": "/public/imgs/faux-hawk.png",
+    "gallery": [],
+    "tags": ["moicano", "urbano"]
+  },
+  {
+    "name": "Man Bun",
+    "slug": "man-bun",
+    "description": "Coque masculino para cabelos longos.",
+    "texture": ["straight", "wavy", "curly"],
+    "length": "long",
+    "main-image": "/public/imgs/man-bun.png",
+    "gallery": [],
+    "tags": ["coque", "hipster"]
+  },
+  {
+    "name": "Hard Part",
+    "slug": "hard-part",
+    "description": "Corte com a risca lateral feita na navalha.",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "/public/imgs/hard-part.png",
+    "gallery": [],
+    "tags": ["navalhado", "detalhe"]
+  },
+  {
+    "name": "Spiky Hair",
+    "slug": "spiky-hair",
+    "description": "Cabelo espetado com finalizadores.",
+    "texture": ["straight"],
+    "length": "short",
+    "main-image": "/public/imgs/spiky.png",
+    "gallery": [],
+    "tags": ["espetado", "jovem"]
+  },
+  {
+    "name": "Disconnected Undercut",
+    "slug": "disconnected-undercut",
+    "description": "Topo longo com laterais raspadas sem transição.",
+    "texture": ["straight", "wavy"],
+    "length": "medium",
+    "main-image": "/public/imgs/disconnected.png",
+    "gallery": [],
+    "tags": ["contraste", "estiloso"]
+  }
+]
