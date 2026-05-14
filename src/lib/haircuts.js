@@ -13,7 +13,7 @@ function adapt(haircut) {
   return {
     id: haircut.id,
     name: haircut.name,
-    image: haircut["main-image"],
+    image: haircut["mainImage"],
     description: haircut.description,
     tags: haircut.tags ?? [],
   };
@@ -27,7 +27,7 @@ export async function getHaircuts({ signal } = {}) {
 }
 
 export async function getHaircut(id, { signal } = {}) {
-  const res = await fetch(`${API_URL}/api/hairstyles/${id}`, { signal });
+  const res = await fetch(`${API_URL}/api/hairstyle/${id}`, { signal });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
